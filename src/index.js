@@ -1,30 +1,42 @@
 //import { navListeners } from "./todoapp";
-import { taskArray, createTask, newTaskButtonListener, showTasks } from "./class-func";
-import {initialDraw, createTaskCard, newTaskInputCard, newTaskButtonListenerDOM} from "/src/dom.js";
+import { taskArray, createTask, newTaskButtonListener, showTasks, delTask } from "./class-func";
+import {initialDraw, createTaskCard, newTaskInputCard, newTaskButtonListenerDOM, statusListeners, newTaskExitButtonListenerDOM, removeAllTaskCards, delBtnListeners, checkListeners} from "/src/dom.js";
+import './style.css';
 //import {} from "/src/todoapp.js";
 
 
+
+
 initialDraw()
-//clickOnElementMenu()
-//navListeners()
+
 
 const navListeners = () => {
-    const items = document.querySelectorAll(".navElements")
+    const items = document.querySelectorAll(".navElements");
     items.forEach(item => {
         item.addEventListener("click", function() {clickOnElementMenu(item.id)})
     })
     
 };
 
-//(n, task, project, description)
+
 
 
 const clickOnElementMenu = (el)=>{
+    
     switch (el){
         case "new task":
-        newTaskInputCard();
-        newTaskButtonListener()
-        newTaskButtonListenerDOM()
+            delBtnListeners();
+            checkListeners()
+            if(statusListeners.newTask){
+                statusListeners.newTask=false;
+                newTaskInputCard(); //shows input value crd
+                newTaskButtonListener(); //create task button to save data
+                newTaskButtonListenerDOM(); //create task button to manipulate dom
+                newTaskExitButtonListenerDOM(); //exit button listener
+                
+
+                
+            }
         break;
         case "show projects":
         // f new proj
@@ -35,17 +47,27 @@ const clickOnElementMenu = (el)=>{
         console.log("show me done projects");
         break;
         case "show all tasks":
+        removeAllTaskCards()
         showTasks()
+        checkListeners()
+        delBtnListeners()
     } 
 };
 
+
 navListeners()
+showTasks()
+checkListeners()
+delBtnListeners()
 
 
 
-// createTask("ukol2", "projekt2", "popis2");
-// createTask("ukol3", "projekt3", "popis3");
-// createTask("ukol4", "projekt4", "popis4");
-//showTasks()
+
+
+
+
+
+
+
 
 
