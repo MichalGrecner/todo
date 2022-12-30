@@ -1,6 +1,6 @@
 //import { navListeners } from "./todoapp";
 import {createTask, taskArray, newTaskButtonListener, delTask, changeStatusTask, loadProjects, filteredTasksFunc} from "./class-func.js"
-import {initialDraw, createTaskCard, newTaskInputCard, newTaskButtonListenerDOM, statusListeners, newTaskExitButtonListenerDOM, removeAllTaskCards, delBtnListeners, checkListeners, showTasks, showDoneTasks, showUnDoneTasks, showProjectsCard} from "/src/dom.js";
+import {initialDraw, createTaskCard, newTaskInputCard, newTaskButtonListenerDOM, statusListeners, newTaskExitButtonListenerDOM, removeAllTaskCards, delBtnListeners, checkListeners, showTasks, showDoneTasks, showUnDoneTasks, showProjectsCard, showExistingProjectsBtnListener} from "/src/dom.js";
 import './style.css';
 
 initialDraw()
@@ -24,7 +24,8 @@ const clickOnElementMenu = (el)=>{
             if(statusListeners.newTask){
                 statusListeners.newTask=false;
                 newTaskInputCard(); //shows input value crd
-                newTaskButtonListener(); //create task button to save data
+                showExistingProjectsBtnListener();
+                newTaskButtonListener(); //button to save data
                 newTaskButtonListenerDOM(); //create task button to manipulate dom
                 newTaskExitButtonListenerDOM(); //exit button listener
             }
@@ -34,6 +35,8 @@ const clickOnElementMenu = (el)=>{
         case "show projects":
         removeAllTaskCards();
         showProjectsCard();
+        delBtnListeners();
+        checkListeners();
 
         break;
         case "undone tasks":

@@ -10,7 +10,7 @@ function createElement(type, text, parentID, selfID, selfClass){
     el.id = selfID
     el.className = selfClass
     const parent = document.getElementById(parentID);
-    parent.appendChild(el)
+    parent.appendChild(el);
 }
 
 function createInput(type, parentID, selfID, selfClass, checked){
@@ -59,7 +59,6 @@ const showDoneTasks = () => {
             }
         })
     } 
-    else {console.log("nothing in storage yet")}   
 }
 
 const showUnDoneTasks = () => {
@@ -125,8 +124,9 @@ const newTaskInputCard = () => {
     //(type, parentID, selfID, selfClass)
     const projectInput = createInput("text", "newProjectLine", "newProjectInput", "taskInput")
 
-
-
+    
+    const existingProjBtn = createElement("button", "Choose existing project", "newCardTask", "projBtn", "projBtn");
+    const existingProjDiv = createElement("div", "", "newCardTask", "existingProjDiv", "existingProjDiv")
 
     const dateLine = createElement("div", "", "newCardTask", "newDateLine", "cardLine")
     const dateLabel = createElement("p", "DUE DATE: ", "newDateLine", "newDateLabel", "cardLabel");
@@ -137,18 +137,52 @@ const newTaskInputCard = () => {
     const descriptionLabel = createElement("p", "Description: ", "newDescriptionLine", "newDescriptionLabel", "cardLabel");
     const descriptionInput = createElement("textarea", "", "newDescriptionLine", "newDescriptionInput", "taskInput");
 
-
-    // const statusLine = createElement("div", "", "newCardTask", "statusLine", "cardLine");
-    // const statusLabel = createElement("p", "DONE: ", "statusLine", "statusLabel", "cardLabel")
-    // //(type, parentID, selfID, selfClass){
-    
-    // const statusDone = createInput("checkbox", "statusLine","status", "cardStatus") 
-
-    //type, text, parentID, selfID, selfClass
     const inputButton = createElement("button", "Create Task", "newCardTask", "inputTaskBtn", "btn")
 }
+const showExistingProjectsBtnListener = () =>{
+    const btn = document.getElementById("projBtn");
+    const projects = loadProjects();
+    btn.addEventListener("click", function(){
+        const existingProjLine=document.getElementById("noProjectLine")
+        if(existingProjLine) existingProjLine.remove()
+        if(Object.keys(projects).length==0){
+            console.log("ukazuje ne projects created yet?")
+            const projectOverViewLine = createElement("div", "", "existingProjDiv", "noProjectLine","noProjLine")
+            const projectName = createElement("p","No projects has been created","noProjectLine", "noProjecttext", "projOverview")
+            }
+        showExistingProjectsNewTask(Object.keys(projects));
+    })
+}
 
+const showExistingProjectsNewTask =(projectsNames) =>{
+    const parentDiv = document.getElementById("existingProjDiv");
+    const existingProjectLine = document.getElementsByClassName("existingProjectLine");
+    //prevent from displaying projects again if porjects are already displayed. 
+    if(existingProjectLine){
+        const projectsLines = document.querySelectorAll(".existingProjectLine");
+        projectsLines.forEach((line)=>{
+            line.remove();
+        })
+    }
+    for(let proj of projectsNames){
+        const existingProjectLine = createElement("div", "", "existingProjDiv", proj,"existingProjectLine")
+        const projectName = createElement("p", proj, proj, "", "projNameText")
+    }
+    chooseFromExistingProjectListener();
+    
+}
 
+const chooseFromExistingProjectListener = () =>{
+    const projects = document.querySelectorAll(".existingProjectLine");
+    const projectInputField = document.getElementById("newProjectInput");
+    projects.forEach((project)=>{
+        project.addEventListener("click", function(){
+            projectInputField.value=project.id
+        })
+    })
+ }
+    
+ 
 
 const newTaskButtonListenerDOM = () =>{
     const btn = document.getElementById("inputTaskBtn");
@@ -201,8 +235,6 @@ const checkListeners = () => {
     
     checkbtn.forEach(btn => {
         btn.addEventListener("click", function(){
-            console.log("zmacnuto checkbox")
-            //if (btn.)
             changeStatusTask(btn.id.replace(/\D/g,''));
         })
     })
@@ -210,20 +242,24 @@ const checkListeners = () => {
 
 const showProjectsCard = () =>{
     const projects = loadProjects();
-    
+    console.log(projects)
+    if(Object.keys(projects).length!==0){
     const projOverviewCard = createElement("div", "", "content", "projOverviewCard", "taskCard")
+    }
     let counter = 0;
     for(let project in projects){
-        console.log(`${project}: ${projects[project]}, counter: ${counter}`);
         const projectOverViewLine = createElement("div", "", "projOverviewCard", project,"projOverviewLineClass")
         const projectName = createElement("p", project, project, "", "projOverview")
         const projecTasks = createElement("p", projects[project], project, "", "projOverview")
         counter++;
-        
     }
-    
     chooseProjectListner();
 }
+
+
+
+
+
 
 const chooseProjectListner = () => {
     const projectLine = document.querySelectorAll(".projOverviewLineClass");
@@ -237,6 +273,8 @@ const chooseProjectListner = () => {
 
 const showfilteredTasks = (index, element) => {
     createTaskCard(index, element.task, element.project, element.date,element.description, element.status)
+    delBtnListeners();
+    checkListeners();
 
     
 }
@@ -244,4 +282,4 @@ const showfilteredTasks = (index, element) => {
 
 
 
-export {initialDraw, createTaskCard, newTaskInputCard, newTaskButtonListenerDOM, newTaskExitButtonListenerDOM,statusListeners, removeAllTaskCards, delBtnListeners, checkListeners, showTasks, showDoneTasks, showUnDoneTasks, showProjectsCard, showfilteredTasks}
+export {initialDraw, createTaskCard, newTaskInputCard, newTaskButtonListenerDOM, newTaskExitButtonListenerDOM,statusListeners, removeAllTaskCards, delBtnListeners, checkListeners, showTasks, showDoneTasks, showUnDoneTasks, showProjectsCard, showfilteredTasks, showExistingProjectsBtnListener}

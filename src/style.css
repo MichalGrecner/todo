@@ -37,6 +37,7 @@ nav{
     flex-shrink: 0;
 }
 
+
 h1{
     margin:20px;
 }
@@ -44,7 +45,7 @@ ul{
     list-style: none;
 }
 li{
-    margin:10px 0;
+    margin:10px;
     background-color: #3a4293;
     text-align: center;
     border-radius: 3px;
@@ -97,27 +98,80 @@ li:hover{
     
 }
 
-.delBtn{
+.delBtn, .projBtn, .btn, #exitNewTaskBtn{
     border:2px solid #3a4293;
     padding-left: 10px;
     padding-right: 10px;
     height:40px;
     font-weight: bold;
 }
-.delBtn:hover{
+
+
+.projBtn, .btn, #exitNewTaskBtn{
+    width:210px;
+    height:40px;
+    font-weight: bold;
+    border:2px solid #3a4293;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.delBtn:hover, .projBtn:hover, .btn:hover, #exitNewTaskBtn:hover{
     transform: scale(1.1);
 }
+
 .cardLine{
     margin-left: 20px;
     margin-right: 20px;
-    
+}
+
+#newCardTask input{
+    width: 210px;
+    height:30px;
+    font-size:15px;
+    padding-left:5px;
+}
+
+#newCardTask textarea{
+    width: 210px;
+    height:50px;
+    font-size:15px;
+    padding-left:5px;
+    padding-top: 3px;
 }
 
 #newCardTask{
     display:flex;
     flex-direction: column;
     text-align: left;
+    align-items: center;
+    padding-top:20px;
+    padding-bottom:20px;
+    
+    
 }
+
 #exitNewTaskBtn{
     order:2;
+}
+#projOverviewCard{
+    display:flex;
+    flex-direction: column;
+}
+.projOverviewLineClass{
+    display: flex;
+    gap:20px;
+    border:2px solid #3a4293;
+    padding-left: 10px;
+    padding-right: 10px;
+    height:30px;
+    justify-content: center;
+    align-items: center;
+}
+.projOverviewLineClass:hover{
+    transform: scale(1.1);
+}
+
+.projOverviewLineClass p{
+    font-weight: bold;
 }

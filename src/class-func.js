@@ -9,14 +9,14 @@ const createTask = (task, project,date, description, status) => {
     checkLclStorage()
     taskArray.push(obj)
     localStorage.setItem("taskData", JSON.stringify(taskArray))
-    taskArray = []
+    taskArray = [];
 }
 
 const checkLclStorage = () => {
     const taskDataJSON = localStorage.getItem("taskData");
     if(taskDataJSON) {  
         const tasksFromMemory = JSON.parse(taskDataJSON);
-        taskArray = tasksFromMemory
+        taskArray = tasksFromMemory;
         }
 }
 
@@ -30,7 +30,7 @@ const newTaskButtonListener =()=>{
     const description = document.getElementById("newDescriptionInput")
     const status = document.getElementById("status")
     
-    btn.addEventListener("click", function(){createTask(task.value, project.value, date.value, description.value, status.checked)})
+    btn.addEventListener("click", function(){createTask(task.value, project.value, date.value, description.value, false)})
 
 }
 
@@ -74,13 +74,8 @@ const loadProjects = () => {
             } else{
                 projectsNumbers[project] = 1;
             }
-        }
-        console.log("PROJECTNUBERS after for: " + JSON.stringify(projectsNumbers))
-        
-        
-    } else 
-    { console.log("nothing in storage yet")}   
-    
+        }  
+    } 
     return projectsNumbers;
 }
 
