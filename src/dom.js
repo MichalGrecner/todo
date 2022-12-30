@@ -1,4 +1,4 @@
-import {showTasks, delTask, changeStatusTask } from "./class-func";
+import { delTask, changeStatusTask, loadProjects, filteredTasksFunc } from "./class-func";
 
 let statusListeners = {
     newTask : true
@@ -26,23 +26,55 @@ function createInput(type, parentID, selfID, selfClass, checked){
     parent.appendChild(input)
 }
 
-
-
-
-
-
 function initialDraw(){
     createNav();
-    //navListeners();
 }
 
 const createNav = () => {
-    const items =["new task", "show projects", "done tasks", "show all tasks"];
+    const items =["new task", "show projects","undone tasks" ,"done tasks", "show all tasks"];
     createElement("ul", "", "navbar", "ulNav", "ulNav")
     for (let item of items){
         createElement("li", item, "ulNav", item, "navElements")
     }
 };
+
+const showTasks = () => {
+    const tasksDataJSON = localStorage.getItem("taskData");
+    if (tasksDataJSON) {
+        const tasksData  = JSON.parse(tasksDataJSON);
+        console.log("tasksDAta pri SHOWTASK: " + tasksData)
+        tasksData.forEach((element, index)=>{
+        createTaskCard(index, element.task, element.project, element.date,element.description, element.status
+        )})
+    } else { console.log("nothing in storage yet")}   
+}
+
+const showDoneTasks = () => {
+    const tasksDataJSON = localStorage.getItem("taskData");
+    if (tasksDataJSON) {
+        const tasksData  = JSON.parse(tasksDataJSON);
+        tasksData.forEach((element, index)=>{
+            if(element.status==true){
+                createTaskCard(index, element.task, element.project, element.date,  element.description, element.status)
+            }
+        })
+    } 
+    else {console.log("nothing in storage yet")}   
+}
+
+const showUnDoneTasks = () => {
+    const tasksDataJSON = localStorage.getItem("taskData");
+    if (tasksDataJSON) {
+        const tasksData  = JSON.parse(tasksDataJSON);
+        tasksData.forEach((element, index)=>{
+            if(element.status==false){
+                createTaskCard(index, element.task, element.project, element.date,  element.description, element.status)
+            }
+        })
+    } 
+    else {console.log("nothing in storage yet")}   
+}
+
 
 const createTaskCard = (n, task, project,date, description, status) => {
     //type, text, parentID, selfID, selfClass
@@ -63,7 +95,7 @@ const createTaskCard = (n, task, project,date, description, status) => {
 
     const descriptionLine = createElement("div", "", "card" + n, "descriptionLine" + n, "cardLine");
     const descriptionLabel = createElement("p", "DESCRIPTION: ", "descriptionLine" + n, "descriptionLabel" + n, "cardLabel")
-    const descriptionText = createElement("p", description, "descriptionLine"+ n, "descriptionText" + n, "cardText") 
+    const descriptionText = createElement("p", description, "descriptionLine"+ n, "descriptionText" + n, "cardText descText") 
 
     const statusLine = createElement("div", "", "card" + n, "statusLine" + n, "cardLine");
     const statusLabel = createElement("p", "DONE: ", "statusLine" + n, "statusLabel" + n, "cardLabel")
@@ -81,7 +113,7 @@ const newTaskInputCard = () => {
     //type, text, parentID, selfID, selfClass
     const newTaskcard = createElement("div", "", "content", "newCardTask", "taskCard")
 
-    const exitBtn = createElement("button", "X", "newCardTask", "exitNewTaskBtn", "ExitBtn")
+    const exitBtn = createElement("button", "CANCEL", "newCardTask", "exitNewTaskBtn", "ExitBtn")
 
     const taskLine = createElement("div", "", "newCardTask", "newTaskLine", "cardLine")
     const taskLabel = createElement("p", "TASK: ", "newTaskLine", "newTaskLabel", "cardLabel");
@@ -93,8 +125,11 @@ const newTaskInputCard = () => {
     //(type, parentID, selfID, selfClass)
     const projectInput = createInput("text", "newProjectLine", "newProjectInput", "taskInput")
 
+
+
+
     const dateLine = createElement("div", "", "newCardTask", "newDateLine", "cardLine")
-    const dateLabel = createElement("p", "DDUE DATE: ", "newDateLine", "newDateLabel", "cardLabel");
+    const dateLabel = createElement("p", "DUE DATE: ", "newDateLine", "newDateLabel", "cardLabel");
     //(type, parentID, selfID, selfClass)
     const inputDate = createInput("date", "newDateLine", "newDateInput", "dateCalendar")
 
@@ -103,15 +138,17 @@ const newTaskInputCard = () => {
     const descriptionInput = createElement("textarea", "", "newDescriptionLine", "newDescriptionInput", "taskInput");
 
 
-    const statusLine = createElement("div", "", "newCardTask", "statusLine", "cardLine");
-    const statusLabel = createElement("p", "DONE: ", "statusLine", "statusLabel", "cardLabel")
-    //(type, parentID, selfID, selfClass){
+    // const statusLine = createElement("div", "", "newCardTask", "statusLine", "cardLine");
+    // const statusLabel = createElement("p", "DONE: ", "statusLine", "statusLabel", "cardLabel")
+    // //(type, parentID, selfID, selfClass){
     
-    const statusDone = createInput("checkbox", "statusLine","status", "cardStatus") 
+    // const statusDone = createInput("checkbox", "statusLine","status", "cardStatus") 
 
     //type, text, parentID, selfID, selfClass
     const inputButton = createElement("button", "Create Task", "newCardTask", "inputTaskBtn", "btn")
 }
+
+
 
 const newTaskButtonListenerDOM = () =>{
     const btn = document.getElementById("inputTaskBtn");
@@ -165,15 +202,46 @@ const checkListeners = () => {
     checkbtn.forEach(btn => {
         btn.addEventListener("click", function(){
             console.log("zmacnuto checkbox")
+            //if (btn.)
             changeStatusTask(btn.id.replace(/\D/g,''));
         })
     })
 }
 
+const showProjectsCard = () =>{
+    const projects = loadProjects();
+    
+    const projOverviewCard = createElement("div", "", "content", "projOverviewCard", "taskCard")
+    let counter = 0;
+    for(let project in projects){
+        console.log(`${project}: ${projects[project]}, counter: ${counter}`);
+        const projectOverViewLine = createElement("div", "", "projOverviewCard", project,"projOverviewLineClass")
+        const projectName = createElement("p", project, project, "", "projOverview")
+        const projecTasks = createElement("p", projects[project], project, "", "projOverview")
+        counter++;
+        
+    }
+    
+    chooseProjectListner();
+}
 
+const chooseProjectListner = () => {
+    const projectLine = document.querySelectorAll(".projOverviewLineClass");
+    projectLine.forEach(line => {
+        line.addEventListener("click", function(){
+            removeAllTaskCards();
+            filteredTasksFunc(line.id)
+        })
+    })
+}
 
+const showfilteredTasks = (index, element) => {
+    createTaskCard(index, element.task, element.project, element.date,element.description, element.status)
+
+    
+}
     
 
 
 
-export {initialDraw, createTaskCard, newTaskInputCard, newTaskButtonListenerDOM, newTaskExitButtonListenerDOM,statusListeners, removeAllTaskCards, delBtnListeners, checkListeners}
+export {initialDraw, createTaskCard, newTaskInputCard, newTaskButtonListenerDOM, newTaskExitButtonListenerDOM,statusListeners, removeAllTaskCards, delBtnListeners, checkListeners, showTasks, showDoneTasks, showUnDoneTasks, showProjectsCard, showfilteredTasks}

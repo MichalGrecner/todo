@@ -1,14 +1,9 @@
 //import { navListeners } from "./todoapp";
-import { taskArray, createTask, newTaskButtonListener, showTasks, delTask } from "./class-func";
-import {initialDraw, createTaskCard, newTaskInputCard, newTaskButtonListenerDOM, statusListeners, newTaskExitButtonListenerDOM, removeAllTaskCards, delBtnListeners, checkListeners} from "/src/dom.js";
+import {createTask, taskArray, newTaskButtonListener, delTask, changeStatusTask, loadProjects, filteredTasksFunc} from "./class-func.js"
+import {initialDraw, createTaskCard, newTaskInputCard, newTaskButtonListenerDOM, statusListeners, newTaskExitButtonListenerDOM, removeAllTaskCards, delBtnListeners, checkListeners, showTasks, showDoneTasks, showUnDoneTasks, showProjectsCard} from "/src/dom.js";
 import './style.css';
-//import {} from "/src/todoapp.js";
-
-
-
 
 initialDraw()
-
 
 const navListeners = () => {
     const items = document.querySelectorAll(".navElements");
@@ -19,32 +14,41 @@ const navListeners = () => {
 };
 
 
-
-
 const clickOnElementMenu = (el)=>{
     
     switch (el){
         case "new task":
+            removeAllTaskCards();
             delBtnListeners();
-            checkListeners()
+            checkListeners();
             if(statusListeners.newTask){
                 statusListeners.newTask=false;
                 newTaskInputCard(); //shows input value crd
                 newTaskButtonListener(); //create task button to save data
                 newTaskButtonListenerDOM(); //create task button to manipulate dom
                 newTaskExitButtonListenerDOM(); //exit button listener
-                
-
-                
             }
+            //enables opening "new task card" again
+            statusListeners.newTask=true;
         break;
         case "show projects":
-        // f new proj
-        console.log("showing project");
+        removeAllTaskCards();
+        showProjectsCard();
+
         break;
-        case "done":
-        // show memory - done projects
-        console.log("show me done projects");
+        case "undone tasks":
+        removeAllTaskCards();
+        showUnDoneTasks();
+        delBtnListeners();
+        checkListeners();
+        
+        break;
+        case "done tasks":
+        removeAllTaskCards()
+        showDoneTasks()
+        delBtnListeners();
+        checkListeners();
+        
         break;
         case "show all tasks":
         removeAllTaskCards()

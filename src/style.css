@@ -5,46 +5,119 @@
 }
 :root {
   box-sizing: border-box;
+  --grey: #a8bce8
+  
 }
 
 body{
-    display:flex;
-    flex-direction: column;
-    margin-left: 40px;
-    margin-top: 40px;
+    background-color: #cbd6f2;
+    text-align: center;
 }
 
-#navbar{
-    
-}
-ul{
-    
-    list-style: none;
-}
-li{
-    margin:20px 0;
+#app{
+    margin: 0 auto;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    min-width: 1030px;
+
 
 }
 
 main{
     display:flex;
+    gap: 20px;
+    flex-shrink: 0;
+    justify-items: flex-start;
+    width:1000px;
     
+}
+nav{
+    flex-shrink: 0;
+}
+
+h1{
+    margin:20px;
+}
+ul{
+    list-style: none;
+}
+li{
+    margin:10px 0;
+    background-color: #3a4293;
+    text-align: center;
+    border-radius: 3px;
+    color:white;
+    padding: 10px 20px;
+}
+li:hover{
+    transform: scale(1.1);
+    
+}
+
+
+#navbar{
+    background-color: var(--grey);
+    color:black;
+    border-radius: 5px;
+    border:3px solid #3a4293;
+    padding:10px;
+    font-weight: bold;
+    
+
 }
 
 #content{
-    
-    width: 1000px;
+    flex-shrink: 0;
     display:flex;
     gap:20px;
+    flex-direction: column;
 }
 
 .taskCard{
-    border:2px solid green;
-    position:relative;
+    display:flex;
+    gap: 20px;
+    border-radius: 5px;
+    padding:10px;
+    background-color: var(--grey);
+    border:3px solid #3a4293;
+    width: 100%;
+    
+    
+}
+.cardLabel{
+    font-weight: bold;
+    
+}
+.descText{
+    max-width:100px;
+    margin-left: 0;
+    margin-right: 0;
+    
+}
+
+.delBtn{
+    border:2px solid #3a4293;
+    padding-left: 10px;
+    padding-right: 10px;
+    height:40px;
+    font-weight: bold;
+}
+.delBtn:hover{
+    transform: scale(1.1);
+}
+.cardLine{
+    margin-left: 20px;
+    margin-right: 20px;
+    
+}
+
+#newCardTask{
+    display:flex;
+    flex-direction: column;
+    text-align: left;
 }
 #exitNewTaskBtn{
-    position:absolute;
-    right:5px;
-    top:5px;
-
+    order:2;
 }
