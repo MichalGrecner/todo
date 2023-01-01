@@ -35,8 +35,8 @@ const clickOnElementMenu = (el)=>{
         case "show projects":
         removeAllTaskCards();
         showProjectsCard();
-        delBtnListeners();
-        checkListeners();
+        // delBtnListeners();
+        // checkListeners();
 
         break;
         case "undone tasks":

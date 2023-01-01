@@ -17,7 +17,6 @@ function createInput(type, parentID, selfID, selfClass, checked){
     const input = document.createElement("input");
     input.type=type;
     if(type="checkbox"){
-        console.log(checked)
         checked == true? input.checked = true :false 
     } 
     input.id=selfID;
@@ -42,9 +41,11 @@ const showTasks = () => {
     const tasksDataJSON = localStorage.getItem("taskData");
     if (tasksDataJSON) {
         const tasksData  = JSON.parse(tasksDataJSON);
-        console.log("tasksDAta pri SHOWTASK: " + tasksData)
-        tasksData.forEach((element, index)=>{
-        createTaskCard(index, element.task, element.project, element.date,element.description, element.status
+        // tasksData.forEach((element, index)=>{
+        // createTaskCard(index, element.task, element.project, element.date,element.description, element.status
+        // )})
+        tasksData.forEach((element)=>{
+        createTaskCard(element.id, element.task, element.project, element.date,element.description, element.status
         )})
     } else { console.log("nothing in storage yet")}   
 }
@@ -55,7 +56,7 @@ const showDoneTasks = () => {
         const tasksData  = JSON.parse(tasksDataJSON);
         tasksData.forEach((element, index)=>{
             if(element.status==true){
-                createTaskCard(index, element.task, element.project, element.date,  element.description, element.status)
+                createTaskCard(element.id, element.task, element.project, element.date,  element.description, element.status)
             }
         })
     } 
@@ -67,7 +68,7 @@ const showUnDoneTasks = () => {
         const tasksData  = JSON.parse(tasksDataJSON);
         tasksData.forEach((element, index)=>{
             if(element.status==false){
-                createTaskCard(index, element.task, element.project, element.date,  element.description, element.status)
+                createTaskCard(element.id, element.task, element.project, element.date,  element.description, element.status)
             }
         })
     } 
@@ -146,7 +147,6 @@ const showExistingProjectsBtnListener = () =>{
         const existingProjLine=document.getElementById("noProjectLine")
         if(existingProjLine) existingProjLine.remove()
         if(Object.keys(projects).length==0){
-            console.log("ukazuje ne projects created yet?")
             const projectOverViewLine = createElement("div", "", "existingProjDiv", "noProjectLine","noProjLine")
             const projectName = createElement("p","No projects has been created","noProjectLine", "noProjecttext", "projOverview")
             }
@@ -194,6 +194,7 @@ const newTaskButtonListenerDOM = () =>{
         removeAllTaskCards()
         showTasks()
         delBtnListeners()
+        checkListeners();
 
     })
 
@@ -222,6 +223,7 @@ const delBtnListeners = () => {
     btns.forEach(btn => {
         btn.addEventListener("click", function(){
             console.log("zmacnuto delete")
+            
             delTask(btn.id);
             removeAllTaskCards();
             showTasks();
@@ -232,9 +234,9 @@ const delBtnListeners = () => {
 
 const checkListeners = () => {
     const checkbtn = document.querySelectorAll(".cardStatus");
-    
     checkbtn.forEach(btn => {
         btn.addEventListener("click", function(){
+            console.log("posilam btnid:v" + btn.id)
             changeStatusTask(btn.id.replace(/\D/g,''));
         })
     })
@@ -271,15 +273,11 @@ const chooseProjectListner = () => {
     })
 }
 
-const showfilteredTasks = (index, element) => {
-    createTaskCard(index, element.task, element.project, element.date,element.description, element.status)
-    delBtnListeners();
-    checkListeners();
-
-    
+const showfilteredTask = (index, element) => {
+    createTaskCard(element.id, element.task, element.project, element.date,element.description, element.status)
 }
     
 
 
 
-export {initialDraw, createTaskCard, newTaskInputCard, newTaskButtonListenerDOM, newTaskExitButtonListenerDOM,statusListeners, removeAllTaskCards, delBtnListeners, checkListeners, showTasks, showDoneTasks, showUnDoneTasks, showProjectsCard, showfilteredTasks, showExistingProjectsBtnListener}
+export {initialDraw, createTaskCard, newTaskInputCard, newTaskButtonListenerDOM, newTaskExitButtonListenerDOM,statusListeners, removeAllTaskCards, delBtnListeners, checkListeners, showTasks, showDoneTasks, showUnDoneTasks, showProjectsCard, showfilteredTask, showExistingProjectsBtnListener}

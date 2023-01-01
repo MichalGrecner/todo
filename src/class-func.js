@@ -1,12 +1,16 @@
-import {initialDraw, createTaskCard, newTaskInputCard, newTaskButtonListenerDOM, showfilteredTasks} from "/src/dom.js";
+import {initialDraw, createTaskCard, newTaskInputCard, newTaskButtonListenerDOM, showfilteredTask, delBtnListeners, checkListeners} from "/src/dom.js";
 
 
 let taskArray = [];
 
 const createTask = (task, project,date, description, status) => {
     
-    const obj = {task, project,date, description, status}
     checkLclStorage()
+    let id = getNewId();
+    //const obj = {task, project,date, description, status}
+    const obj = {id, task, project,date, description, status}
+    
+
     taskArray.push(obj)
     localStorage.setItem("taskData", JSON.stringify(taskArray))
     taskArray = [];
@@ -20,6 +24,14 @@ const checkLclStorage = () => {
         }
 }
 
+const getNewId = () => {
+    let tryId = 0;
+    while(taskArray.some(task =>task.id == tryId)){
+        tryId ++;
+    }
+    return tryId;
+}
+
 
 
 const newTaskButtonListener =()=>{
@@ -30,7 +42,12 @@ const newTaskButtonListener =()=>{
     const description = document.getElementById("newDescriptionInput")
     const status = document.getElementById("status")
     
-    btn.addEventListener("click", function(){createTask(task.value, project.value, date.value, description.value, false)})
+    
+
+    btn.addEventListener("click", function(){
+        if(project.value=="") project.value="no project name";
+        if(task.value =="") task.value="no task name";
+        createTask(task.value, project.value, date.value, description.value, false)})
 
 }
 
@@ -38,28 +55,65 @@ const newTaskButtonListener =()=>{
 
 
 const delTask = (n) => {
-    console.log("N je" + n)
     const tasksDataJSON = localStorage.getItem("taskData");
     const tasksData  = JSON.parse(tasksDataJSON);
-    tasksData.splice(n, 1);
+
+
+    let counter=0;
+    for(const task of tasksData){
+        console.log("TASK.ID: "+ task.id)
+        console.log("N: " + n)
+        console.log("COUNTER: " + counter)
+        console.log("::::::::::::::")
+        if(task.id==n){
+            console.log(task.id)
+            tasksData.splice(counter, 1)
+            break;
+        }
+        counter++;
+    }
+    
     localStorage.setItem("taskData", JSON.stringify(tasksData))
 }
 
+
+// const changeStatusTask = (n) => {
+//     const tasksDataJSON = localStorage.getItem("taskData");
+//     const tasksData  = JSON.parse(tasksDataJSON);
+//     if(tasksData[n].status==false){
+//         tasksData[n].status=true
+//     }
+//     else if( tasksData[n].status==true){
+//         tasksData[n].status=false
+//     }
+//     localStorage.setItem("taskData", JSON.stringify(tasksData))
+// }
 
 const changeStatusTask = (n) => {
-    console.log("N change status je" + n)
     const tasksDataJSON = localStorage.getItem("taskData");
     const tasksData  = JSON.parse(tasksDataJSON);
-
-
-    if(tasksData[n].status==false){
-        tasksData[n].status=true
-    }
-    else if( tasksData[n].status==true){
-        tasksData[n].status=false
+    for(const task of tasksData){
+        if(task.id==n && task.status==false){
+            console.log("here")
+            task.status=true
+            break;
+        }
+        else if(task.id==n && task.status==true){
+            console.log("or here")
+            task.status=false
+            break;
+        }
     }
     localStorage.setItem("taskData", JSON.stringify(tasksData))
 }
+
+
+
+
+
+
+
+
 
 const loadProjects = () => {
 
@@ -88,12 +142,12 @@ const filteredTasksFunc = (chosenProject) => {
     for (let task in tasksData){
         if(tasksData[task].project == chosenProject){
             filteredTasks=tasksData[task]
-            showfilteredTasks(counter, filteredTasks)
-            counter++;
-        }
-    }
-   
-    
+            showfilteredTask(counter, filteredTasks)
+            counter++;    
+        }   
+    } 
+    delBtnListeners();
+    checkListeners();
 }
 
 
